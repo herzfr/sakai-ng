@@ -11,12 +11,29 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { RippleModule } from 'primeng/ripple';
 import { AppMenuComponent } from './app.menu.component';
 import { AppMenuitemComponent } from './app.menuitem.component';
-import { RouterModule } from '@angular/router';
+import { Route, RouterModule } from '@angular/router';
 import { AppTopBarComponent } from './app.topbar.component';
 import { AppFooterComponent } from './app.footer.component';
 import { AppConfigModule } from './config/config.module';
 import { AppSidebarComponent } from "./app.sidebar.component";
-import { AppLayoutComponent } from "./app.layout.component";
+import { AppLayoutExComponent } from './app.layout.component';
+import { CommonModule } from '@angular/common';
+
+const router: Route[] = [
+    {
+        path: '', component: AppLayoutExComponent,
+        children: [
+            { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+            { path: 'dashboard', loadChildren: () => import('../demo/components/dashboard/dashboard.module').then(m => m.DashboardModule) },
+            { path: 'uikit', loadChildren: () => import('../demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
+            //     { path: 'utilities', loadChildren: () => import('../demo/components/utilities/utilities.module').then(m => m.UtilitiesModule) },
+            //     { path: 'documentation', loadChildren: () => import('../demo/components/documentation/documentation.module').then(m => m.DocumentationModule) },
+            //     { path: 'blocks', loadChildren: () => import('../demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },
+            //     { path: 'pages', loadChildren: () => import('../demo/components/pages/pages.module').then(m => m.PagesModule) },
+            //     { path: '**', redirectTo: '/notfound' }
+        ]
+    }
+]
 
 @NgModule({
     declarations: [
@@ -25,13 +42,15 @@ import { AppLayoutComponent } from "./app.layout.component";
         AppFooterComponent,
         AppMenuComponent,
         AppSidebarComponent,
-        AppLayoutComponent,
+        AppLayoutExComponent
     ],
     imports: [
-        BrowserModule,
+        CommonModule,
+        // BrowserModule,
         FormsModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
+        // HttpClientModule,
+        // BrowserAnimationsModule,
+        RouterModule.forChild(router),
         InputTextModule,
         SidebarModule,
         BadgeModule,
@@ -41,6 +60,6 @@ import { AppLayoutComponent } from "./app.layout.component";
         RouterModule,
         AppConfigModule
     ],
-    exports: [AppLayoutComponent]
+    exports: [AppLayoutExComponent]
 })
-export class AppLayoutModule { }
+export class AppLayoutExModule { }
